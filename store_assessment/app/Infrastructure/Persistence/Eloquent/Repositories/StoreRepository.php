@@ -5,21 +5,37 @@ namespace App\Infrastructure\Persistence\Eloquent;
 use App\Domain\Repositories\StoreRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\Models\Store;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Application\DTOs\ProductData;
 use Illuminate\Support\Facades\DB;
 
 class StoreRepository implements StoreRepositoryInterface
 {
-    public function listAllWithProductCount(): iterable
+    public function listStoresWithProductCount(): iterable
     {
         return Store::withCount('products')->get();
     }
 
-    public function findWithProducts(int $id): ?object
+    public function getStoreWithProducts(int $id): ?object
     {
-        return Store::with(['products' => function ($query) {
-            $query->select('products.id', 'name', 'price')
-                  ->withPivot('quantity');
-        }])->find($id);
+        $store = Store::with('products')->find($id);
+        if (!$store) {
+            return null;
+        }
+
+        $products = $store->products->map(fn($product) =>
+            new ProductData(
+                id: $product->id,
+                name: $product->name,
+                stock: $product->pivot?->quantity
+            )
+        );
+
+        return (object)[
+            'id' => $store->id,
+            'name' => $store->name,
+            'description' => $store->description,
+            'products' => $products,
+        ];
     }
 
     public function create(array $data, array $products = []): object

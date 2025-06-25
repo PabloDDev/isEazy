@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Application\UseCases\Product;
+
+use App\Domain\Repositories\Product\ProductRepositoryInterface;
+
+/**
+ * Handles the sale of a product from a store, checking stock levels.
+ */
+class SellProductUseCase
+{
+    public function __construct(
+        protected ProductRepositoryInterface $productRepository
+    ) {}
+
+    /**
+     * Sells a product from a specific store.
+     *
+     * @param int $storeId
+     * @param int $productId
+     * @param int $amount
+     * @return array Contains success status, message, and remaining stock
+     */
+    public function handle(int $storeId, int $productId, int $amount = 1): array
+    {
+        return $this->productRepository->sellProduct($storeId, $productId, $amount);
+    }
+}
