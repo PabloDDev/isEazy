@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Interface\Http\Resources;
+namespace App\Interface\Http\Resources\Store;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Application\DTOs\ProductDTO;

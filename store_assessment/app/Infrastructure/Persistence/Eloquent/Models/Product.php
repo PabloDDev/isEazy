@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Product extends Model
 {
     protected $fillable = ['name', 'price'];
+    protected $hidden = ['id'];
 
     public function stores(): BelongsToMany
     {
-        return $this->belongsToMany(Store::class)
-                    ->withPivot('quantity')
-                    ->withTimestamps();
+        return $this->belongsToMany(Store::class,'store_product')
+                    ->withPivot('quantity');
     }
 }

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Interface\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Store\CreateStoreRequest;
-use App\Http\Requests\Store\FindStoreRequest;
-use App\Http\Resources\Store\StoreResource;
+use App\Interface\Http\Controllers\Controller;
+use App\Interface\Http\Requests\Store\CreateStoreRequest;
+use App\Interface\Http\Requests\Store\FindStoreRequest;
+use App\Interface\Http\Resources\Store\StoreResource;
+use App\Interface\Http\Resources\Store\StoreListResource;
 use App\Application\UseCases\Store\CreateStoreUseCase;
 use App\Application\UseCases\Store\GetStoreUseCase;
 use App\Application\UseCases\Store\ListStoresUseCase;
@@ -36,7 +37,7 @@ class StoreController extends Controller
     public function index(): JsonResponse
     {
         $stores = $this->listStores->handle();
-        return response()->json(StoreResource::collection($stores));
+        return response()->json(StoreListResource::collection($stores));
     }
 
     /**

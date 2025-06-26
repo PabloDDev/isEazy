@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application\DTOs;
+namespace App\Domain\DTOs;
 
 /**
  * DTO representing a product.
  */
-class ProductDTO
+class ProductData
 {
     /**
      * @param int $id

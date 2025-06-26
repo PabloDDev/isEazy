@@ -18,6 +18,6 @@ class ListStoresUseCase
     */
     public function handle(): array
     {
-        return $this->storeRepository->allWithProductCount();
+        return $this->storeRepository->listStoresWithProductCount();
     }
 }

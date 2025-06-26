@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Store;
+namespace App\Interface\Http\Requests\Store;
 
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * Handles validation for deleting a store via JSON body.
  */
-class DeleteStoreRequest extends FormRequest
+class FindStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {

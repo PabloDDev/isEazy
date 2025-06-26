@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\UseCases\Store\Stores;
+namespace App\Application\UseCases\Store;
 
 use App\Domain\Repositories\StoreRepositoryInterface;
 

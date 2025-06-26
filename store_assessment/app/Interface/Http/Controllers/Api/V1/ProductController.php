@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1;
+namespace App\Interface\Http\Controllers\Api\V1;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Product\SellProductRequest;
+use App\Interface\Http\Controllers\Controller;
+use App\Interface\Http\Requests\Product\SellProductRequest;
 use App\Application\UseCases\Product\SellProductUseCase;
 use App\Domain\DTOs\SaleData;
 use Illuminate\Http\JsonResponse;

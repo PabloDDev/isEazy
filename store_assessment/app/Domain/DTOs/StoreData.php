@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\DTOs;
+namespace App\Domain\DTOs;
 use App\Domain\DTOs\ProductData;
 
 class StoreData

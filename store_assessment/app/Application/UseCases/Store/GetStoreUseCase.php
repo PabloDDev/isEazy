@@ -8,7 +8,7 @@ use App\Domain\DTOs\StoreData;
 /**
  * Fetches a store and its products with quantities.
  */
-class GetStoreDetailsUseCase
+class GetStoreUseCase
 {
     public function __construct(
         protected StoreRepositoryInterface $storeRepository

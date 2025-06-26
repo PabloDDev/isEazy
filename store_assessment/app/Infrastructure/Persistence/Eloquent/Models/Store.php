@@ -12,10 +12,11 @@ class Store extends Model
         'description'
     ];
 
+    protected $hidden=['id'];
+
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class)
-                    ->withPivot('quantity')
-                    ->withTimestamps();
+        return $this->belongsToMany(Product::class,'store_product')
+                    ->withPivot('quantity');
     }
 }
