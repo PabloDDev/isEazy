@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Persistence\Eloquent;
+namespace App\Infrastructure\Persistence\Eloquent\Repositories;
 
 use App\Domain\Repositories\StoreRepositoryInterface;
 use App\Infrastructure\Persistence\Eloquent\Models\Store;
