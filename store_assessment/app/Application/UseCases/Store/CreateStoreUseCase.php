@@ -2,7 +2,7 @@
 
 namespace App\Application\UseCases\Store;
 
-use App\Application\DTOs\StoreData;
+use App\Domain\DTOs\StoreData;
 use App\Domain\Repositories\StoreRepositoryInterface;
 
 class CreateStoreUseCase

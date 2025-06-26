@@ -4,15 +4,16 @@ namespace App\Infrastructure\Persistence\Eloquent\Repositories;
 
 use App\Domain\Repositories\ProductRepositoryInterface;
 use Illuminate\Support\Facades\DB;
+use App\Domain\DTOs\SaleData;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function sellProduct(int $storeId, int $productId, int $amount = 1): array
+    public function sellProduct(SaleData $sale): array
     {
-        return DB::transaction(function () use ($storeId, $productId, $amount) {
+        return DB::transaction(function () use ($sale) {
             $pivot = DB::table('store_product')
-                ->where('store_id', $storeId)
-                ->where('product_id', $productId)
+                ->where('store_id', $sale->storeId)
+                ->where('product_id', $sale->productId)
                 ->lockForUpdate()
                 ->first();
 
@@ -23,18 +24,18 @@ class ProductRepository implements ProductRepositoryInterface
                 ];
             }
 
-            if ($pivot->quantity < $amount) {
+            if ($pivot->quantity < $sale->quantity) {
                 return [
                     'success' => false,
                     'message' => 'Insufficient stock.'
                 ];
             }
 
-            $newQuantity = $pivot->quantity - $amount;
+            $newQuantity = $pivot->quantity - $sale->quantity;
 
             DB::table('store_product')
-                ->where('store_id', $storeId)
-                ->where('product_id', $productId)
+                ->where('store_id', $sale->storeId)
+                ->where('product_id', $sale->productId)
                 ->update(['quantity' => $newQuantity]);
 
             return [

@@ -14,11 +14,9 @@ class ListStoresUseCase
     ) {}
     
     /**
-     * Returns a list of all stores and the number of products each one has.
-     *
-     * @return iterable A collection of stores with product counts
-     */
-    public function handle(): iterable
+     * @return StoreData[]
+    */
+    public function handle(): array
     {
         return $this->storeRepository->allWithProductCount();
     }
