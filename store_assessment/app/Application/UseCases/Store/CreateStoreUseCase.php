@@ -19,14 +19,14 @@ class CreateStoreUseCase
     /**
      * Creates a new store and optionally attaches products with quantities.
      *
-     * @param StoreData $data
+     * @param StoreData $store
      * @return object The created store model
      */
-    public function handle(StoreData $data): object
+    public function handle(StoreData $store): storeData
     {
         return $this->storeRepository->create([
-            'name' => $data->name,
-            'description' => $data->description,
-        ], $data->products);
+            'name' => $store->name,
+            'description' => $store->description,
+        ], $store->products);
     }
 }

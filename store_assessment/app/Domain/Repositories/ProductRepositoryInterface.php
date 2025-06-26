@@ -1,22 +1,25 @@
 <?php
 
 namespace App\Domain\Repositories;
-use App\Domain\DTOs\SaleData;
 
-/**
- * Handles product-related persistence logic.
- */
 interface ProductRepositoryInterface
 {
     /**
-     * Sell a product by decreasing stock in a given store.
+     * Retrieves current product quantity from the store.
      *
-     * @param SaleData $sale
-     * @return array{
-     *     success: bool,
-     *     message: string,
-     *     remaining_stock?: int
-     * }
+     * @param int $storeId
+     * @param int $productId
+     * @return int|null
      */
-    public function sellProduct(SaleData $sale): array;
+    public function getProductStockInStore(int $storeId, int $productId): ?int;
+
+    /**
+     * Attempts to reduce product stock in a store within a transaction.
+     *
+     * @param int $storeId
+     * @param int $productId
+     * @param int $amount
+     * @return bool Whether the operation succeeded
+     */
+    public function reduceProductStock(int $storeId, int $productId, int $amount): bool;
 }

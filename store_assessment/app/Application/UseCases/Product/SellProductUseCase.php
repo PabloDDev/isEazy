@@ -15,17 +15,50 @@ class SellProductUseCase
     ) {}
 
     /**
-     * Executes the product sale operation.
-     *
-     * @param SaleData $sale
-     * @return array{
-     *     success: bool,
-     *     message: string,
-     *     remaining_stock?: int
-     * }
+     * Handles product sale decision logic.
      */
     public function handle(SaleData $sale): array
     {
-        return $this->productRepository->sellProduct($sale);
+        $stock = $this->productRepository->getProductStockInStore(
+            $sale->storeId,
+            $sale->productId
+        );
+
+        if (!$stock) {
+            return [
+                'success' => false,
+                'message' => 'Product not found in this store.'
+            ];
+        }
+
+        if ($stock < $sale->quantity) {
+            return [
+                'success' => false,
+                'message' => 'Insufficient stock.'
+            ];
+        }
+
+        $success = $this->productRepository->safelyReduceProductStock(
+            $sale->storeId,
+            $sale->productId,
+            $sale->quantity
+        );
+
+        if (!$success) {
+            return [
+                'success' => false,
+                'message' => 'Transaction failed — possibly due to a race condition.'
+            ];
+        }
+
+        $remaining = $stock - $sale->quantity;
+
+        return [
+            'success' => true,
+            'message' => $remaining <= 5
+                ? 'Sale completed. Warning: stock is low.'
+                : 'Sale completed successfully.',
+            'remaining_stock' => $remaining
+        ];
     }
 }

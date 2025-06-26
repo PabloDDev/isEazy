@@ -8,43 +8,36 @@ use App\Domain\DTOs\SaleData;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function sellProduct(SaleData $sale): array
+    public function getProductStockInStore(int $storeId, int $productId): ?int
     {
-        return DB::transaction(function () use ($sale) {
-            $pivot = DB::table('store_product')
-                ->where('store_id', $sale->storeId)
-                ->where('product_id', $sale->productId)
+        $pivot = DB::table('store_product')
+            ->where('store_id', $storeId)
+            ->where('product_id', $productId)
+            ->lockForUpdate()
+            ->value('quantity');
+
+        return $pivot !== null ? (int)$pivot : null;
+    }
+
+    public function reduceProductStock(int $storeId, int $productId, int $quantity): bool
+    {
+        return DB::transaction(function () use ($storeId, $productId, $amount) {
+            $stock = DB::table('store_product')
+                ->where('store_id', $storeId)
+                ->where('product_id', $productId)
                 ->lockForUpdate()
-                ->first();
+                ->value('quantity');
 
-            if (!$pivot) {
-                return [
-                    'success' => false,
-                    'message' => 'Product not found in this store.'
-                ];
+            if ($stock === null || $stock < $amount) {
+                return false;
             }
-
-            if ($pivot->quantity < $sale->quantity) {
-                return [
-                    'success' => false,
-                    'message' => 'Insufficient stock.'
-                ];
-            }
-
-            $newQuantity = $pivot->quantity - $sale->quantity;
 
             DB::table('store_product')
-                ->where('store_id', $sale->storeId)
-                ->where('product_id', $sale->productId)
-                ->update(['quantity' => $newQuantity]);
+                ->where('store_id', $storeId)
+                ->where('product_id', $productId)
+                ->update(['quantity' => $stock - $amount]);
 
-            return [
-                'success' => true,
-                'message' => $newQuantity <= 5
-                    ? 'Sale completed. Warning: stock is low.'
-                    : 'Sale completed successfully.',
-                'remaining_stock' => $newQuantity
-            ];
+            return true;
         });
     }
 }

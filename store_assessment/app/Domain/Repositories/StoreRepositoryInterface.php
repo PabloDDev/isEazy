@@ -4,9 +4,9 @@ namespace App\Domain\Repositories;
 
 interface StoreRepositoryInterface
 {
-    public function listStoresWithProductCount(): iterable;
+    public function listStoresWithProductCount(): array;
 
-    public function getStoreWithProducts(int $id): ?object;
+    public function getStoreWithProducts(int $id): ?storeData;
 
     public function create(array $data, array $products = []): object;
 
