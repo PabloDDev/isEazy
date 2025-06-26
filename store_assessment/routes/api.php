@@ -9,11 +9,11 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/stores', [StoreController::class, 'index']);
+
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
-    
+    Route::get('/stores', [StoreController::class, 'index']);
     Route::post('/stores', [StoreController::class, 'store']);
-    Route::put('/stores', [StoreController::class, 'update']);
+    Route::post('/stores/update', [StoreController::class, 'update']);
     Route::post('/stores/show', [StoreController::class, 'show']);
     Route::delete('/stores', [StoreController::class, 'destroy']);
 

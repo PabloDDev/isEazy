@@ -100,19 +100,11 @@ class StoreController extends Controller
     {
         $validated = $request->validated();
 
-        $products = collect($validated['products'] ?? [])
-            ->map(fn($product) => new ProductData(
-                id: $product['id'],
-                name: $product['name'],
-                stock: $product['quantity']
-            ))
-            ->all();
-
         $storeData = new StoreData(
             id: $validated['store_id'],
             name: $validated['name'] ?? null,
             description: $validated['description'] ?? null,
-            products: $products
+            products: []
         );
 
         $success = $this->editStore->handle($storeData);
