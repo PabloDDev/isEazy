@@ -38,7 +38,7 @@ class SellProductUseCase
             ];
         }
 
-        $success = $this->productRepository->safelyReduceProductStock(
+        $success = $this->productRepository->reduceProductStock(
             $sale->storeId,
             $sale->productId,
             $sale->quantity

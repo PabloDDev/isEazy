@@ -34,8 +34,32 @@ class CreateStoreRequest extends FormRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:500',
             'products' => 'nullable|array',
-            'products.*.id' => 'required|integer|exists:products,id',
-            'products.*.quantity' => 'required|integer',
+            'products.*.name' => 'required|string',
+            'products.*.stock' => 'required|integer|min:0',
+        ];
+    }
+
+    /**
+     * Get the validation error messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The store name is required.',
+            'name.string' => 'The store name must be a string.',
+            'name.max' => 'The store name must not exceed 255 characters.',
+
+            'description.string' => 'The description must be a string.',
+            'description.max' => 'The description must not exceed 500 characters.',
+
+            'products.array' => 'The products must be an array.',
+
+            'products.*.name.required' => 'Each product must have a name.',
+            'products.*.name.string' => 'Each product name must be a string.',
+            'products.*.stock.required' => 'Each product must have a stock quantity.',
+            'products.*.stock.integer' => 'Product stock must be an integer.',
         ];
     }
 }

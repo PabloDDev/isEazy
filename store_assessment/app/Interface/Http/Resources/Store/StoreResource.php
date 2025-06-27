@@ -3,7 +3,7 @@
 namespace App\Interface\Http\Resources\Store;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Application\DTOs\ProductDTO;
+use App\Domain\DTOs\ProductData;
 
 /**
  * Formats the response for a store object.
@@ -16,7 +16,7 @@ class StoreResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'products' => array_map(function (ProductDTO $product) {
+            'products' => array_map(function (ProductData $product) {
                 return [
                     'id' => $product->id,
                     'name' => $product->name,

@@ -5,6 +5,7 @@ namespace App\Interface\Http\Controllers\Api\V1;
 use App\Interface\Http\Controllers\Controller;
 use App\Interface\Http\Requests\Store\CreateStoreRequest;
 use App\Interface\Http\Requests\Store\FindStoreRequest;
+use App\Interface\Http\Requests\Store\EditStoreRequest;
 use App\Interface\Http\Resources\Store\StoreResource;
 use App\Interface\Http\Resources\Store\StoreListResource;
 use App\Application\UseCases\Store\CreateStoreUseCase;
@@ -49,7 +50,7 @@ class StoreController extends Controller
     public function show(FindStoreRequest $request): JsonResponse
     {
 
-        $storeId = $request->validated('store_id');
+        $id = $request->validated('store_id');
 
         $store = $this->getStore->handle($id);
         if (!$store) {
@@ -69,17 +70,17 @@ class StoreController extends Controller
     {
         
         $validated = $request->validated();
-
+        
         $products = collect($validated['products'] ?? [])
             ->map(fn($product) => new ProductData(
-                id: $product['id'],
+                id: null,
                 name: $product['name'],
-                stock: $product['quantity']
+                stock: $product['stock']
             ))
             ->all();
 
         $storeData = new StoreData(
-            id: 0,
+            id: null,
             name: $request->input('name'),
             description: $request->input('description'),
             products: $products

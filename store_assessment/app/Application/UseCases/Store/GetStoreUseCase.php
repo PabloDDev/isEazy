@@ -22,6 +22,6 @@ class GetStoreUseCase
      */
     public function handle(int $id): ?storeData
     {
-        return $this->storeRepository->getWithProducts($id);
+        return $this->storeRepository->getStoreWithProducts($id);
     }
 }

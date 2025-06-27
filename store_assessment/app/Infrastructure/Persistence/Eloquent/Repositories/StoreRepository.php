@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Domain\DTOs\ProductData;
 use App\Domain\DTOs\StoreData;
 use Illuminate\Support\Facades\DB;
+use App\Infrastructure\Persistence\Eloquent\Models\Product;
 
 class StoreRepository implements StoreRepositoryInterface
 {
@@ -37,7 +38,7 @@ class StoreRepository implements StoreRepositoryInterface
                 name: $product->name,
                 stock: $product->pivot?->quantity
             )
-        );
+        )->toArray();
 
         return new StoreData(
             id: $store->id,
@@ -52,17 +53,21 @@ class StoreRepository implements StoreRepositoryInterface
         return DB::transaction(function () use ($data, $products) {
             $store = Store::create($data);
 
-            if (!empty($products)) {
-                $pivotData = collect($products)->mapWithKeys(function ($item) {
-                    return [
-                        $item['id'] => ['quantity' => $item['quantity']]
-                    ];
-                })->toArray();
+            $pivotData = [];
 
+            foreach ($products as $p) {
+                $product = Product::create([
+                    'name' => $p->name,
+                ]);
+
+                $pivotData[$product->id] = ['quantity' => $p->stock];
+            }
+
+            if (!empty($pivotData)) {
                 $store->products()->attach($pivotData);
             }
 
-            return $store->load('products');
+            $store->load('products');
 
             $productData = $store->products->map(fn($product) =>
                 new ProductData(
@@ -82,10 +87,14 @@ class StoreRepository implements StoreRepositoryInterface
         });
     }
 
-    public function update(int $id, array $data): bool
+    public function update(storeData $storeData): bool
     {
-        $store = Store::findOrFail($id);
-        return $store->update($data);
+        $store = Store::findOrFail($storeData->id);
+        
+        return $store->update([
+            'name' => $storeData->name,
+            'description' => $storeData->description,
+        ]);
     }
 
     public function delete(int $id): bool

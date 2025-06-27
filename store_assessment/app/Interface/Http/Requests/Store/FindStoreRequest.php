@@ -23,4 +23,18 @@ class FindStoreRequest extends FormRequest
             'store_id' => 'required|integer|exists:stores,id',
         ];
     }
+
+    /**
+     * Get the validation error messages.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'store_id.required' => 'The store ID is required.',
+            'store_id.integer'  => 'The store ID must be a valid integer.',
+            'store_id.exists'   => 'The specified store ID does not exist.',
+        ];
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Application\UseCases\Store;
 
 use App\Domain\Repositories\StoreRepositoryInterface;
+use App\Domain\DTOs\StoreData;
 
 /**
  * Handles updating an existing store.
@@ -20,8 +21,8 @@ class EditStoreUseCase
      * @param array $data Fields to update
      * @return bool True if update succeeded
      */
-    public function handle(int $id, array $data): bool
+    public function handle(StoreData $store): bool
     {
-        return $this->storeRepository->update($id, $data);
+        return $this->storeRepository->update($store);
     }
 }

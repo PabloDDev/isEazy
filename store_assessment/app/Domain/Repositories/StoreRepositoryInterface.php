@@ -11,7 +11,7 @@ interface StoreRepositoryInterface
 
     public function create(array $data, array $products = []): object;
 
-    public function update(int $id, array $data): bool;
+    public function update(storeData $store): bool;
 
     public function delete(int $id): bool;
 }

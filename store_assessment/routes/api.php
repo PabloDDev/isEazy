@@ -15,7 +15,7 @@ Route::post('v1/login', [AuthController::class, 'login']);
 Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
     Route::get('/stores', [StoreController::class, 'index']);
     Route::post('/stores/create', [StoreController::class, 'store']);
-    Route::post('/stores', [StoreController::class, 'update']);
+    Route::post('/stores/update', [StoreController::class, 'update']);
     Route::post('/stores/show', [StoreController::class, 'show']);
     Route::delete('/stores/delete', [StoreController::class, 'destroy']);
 

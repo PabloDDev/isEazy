@@ -21,21 +21,21 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function reduceProductStock(int $storeId, int $productId, int $quantity): bool
     {
-        return DB::transaction(function () use ($storeId, $productId, $amount) {
+        return DB::transaction(function () use ($storeId, $productId, $quantity) {
             $stock = DB::table('store_product')
                 ->where('store_id', $storeId)
                 ->where('product_id', $productId)
                 ->lockForUpdate()
                 ->value('quantity');
 
-            if ($stock === null || $stock < $amount) {
+            if ($stock === null || $stock < $quantity) {
                 return false;
             }
 
             DB::table('store_product')
                 ->where('store_id', $storeId)
                 ->where('product_id', $productId)
-                ->update(['quantity' => $stock - $amount]);
+                ->update(['quantity' => $stock - $quantity]);
 
             return true;
         });
